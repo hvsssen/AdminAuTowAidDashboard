@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <div class="login-container">
+        <h1>Welcome</h1>
+        <div class="profile-pic">
+            <img src="autowaid1.jpg" alt="Profile Picture">
+        </div>
+        <form>
+            <input type="email" [(ngModel)]="email" name="email" placeholder="Email">
+            <input type="password" [(ngModel)]="password" name="password" placeholder="Password">
+            <button (click)="login()">Login</button>
+        </form>
+        
+    </div>
+</body>
+</html>
