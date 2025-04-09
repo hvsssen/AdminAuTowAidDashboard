@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://127.0.0.1:8081/api/users'; // Your backend URL
+  private apiUrl = 'https://pfaautowaidbackend.onrender.com/api/users'; // Your backend URL
 
   private http = inject(HttpClient); // Dependency injection for standalone components
 

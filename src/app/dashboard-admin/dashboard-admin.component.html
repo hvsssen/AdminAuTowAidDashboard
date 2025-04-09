@@ -1,0 +1,292 @@
+<link rel="stylesheet" href="styles.css">
+<div class="container mx-auto p-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Autowaid Admin Dashboard</h1>
+    <button (click)="logout()" class="bg-red-500 text-white px-4 py-2 rounded">Logout</button>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="flex space-x-4 mb-6">
+    <button class="px-4 py-2 rounded" [class.bg-blue-500]="currentTab === 'drivers'" [class.text-white]="currentTab === 'drivers'" (click)="currentTab = 'drivers'">Drivers</button>
+    <button class="px-4 py-2 rounded" [class.bg-blue-500]="currentTab === 'users'" [class.text-white]="currentTab === 'users'" (click)="currentTab = 'users'">Users</button>
+    <button class="px-4 py-2 rounded" [class.bg-blue-500]="currentTab === 'requests'" [class.text-white]="currentTab === 'requests'" (click)="currentTab = 'requests'">Requests</button>
+    <button class="px-4 py-2 rounded" [class.bg-blue-500]="currentTab === 'profit'" [class.text-white]="currentTab === 'profit'" (click)="currentTab = 'profit'">Profit</button>
+  </div>
+
+  <!-- DRIVERS SECTION -->
+  <div *ngIf="currentTab === 'drivers'" class="bg-white p-4 rounded shadow">
+    <h2 class="text-2xl mb-4">MySQL Drivers</h2>
+
+    <div class="mb-4 flex flex-wrap gap-2">
+      <input [(ngModel)]="newDriver.username" placeholder="Username" class="p-2 border rounded" />
+      <input [(ngModel)]="newDriver.email" placeholder="Email" class="p-2 border rounded" />
+      <input [(ngModel)]="newDriver.password" placeholder="Password" type="password" class="p-2 border rounded" />
+      <input [(ngModel)]="newDriver.cin" placeholder="CIN" class="p-2 border rounded" />
+      <input [(ngModel)]="newDriver.phone" type="number" placeholder="Phone" class="p-2 border rounded" />
+      <input [(ngModel)]="newDriver.latitude" type="number" placeholder="Latitude" class="p-2 border rounded" />
+      <input [(ngModel)]="newDriver.longitude" type="number" placeholder="Longitude" class="p-2 border rounded" />
+      <button (click)="addMysqlDriver()" class="bg-green-500 text-white p-2 rounded">Add Driver</button>
+    </div>
+
+    <table class="w-full border rounded overflow-hidden mb-6">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 border">ID</th>
+          <th class="p-2 border">Username</th>
+          <th class="p-2 border">Email</th>
+          <th class="p-2 border">Password</th>
+          <th class="p-2 border">Role</th>
+          <th class="p-2 border">CIN</th>
+          <th class="p-2 border">Phone</th>
+          <th class="p-2 border">Latitude</th>
+          <th class="p-2 border">Longitude</th>
+          <th class="p-2 border">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let driver of mysqlDrivers">
+          <td class="p-2 border">{{ driver.id }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.username || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
+            <input [(ngModel)]="editingMysqlDriver.username" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.email || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
+            <input [(ngModel)]="editingMysqlDriver.email" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.password || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
+            <input [(ngModel)]="editingMysqlDriver.password" type="password" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.role || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
+            <input [(ngModel)]="editingMysqlDriver.role" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.cin || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
+            <input [(ngModel)]="editingMysqlDriver.cin" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.phone || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
+            <input [(ngModel)]="editingMysqlDriver.phone" type="number" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.latitude || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
+            <input [(ngModel)]="editingMysqlDriver.latitude" type="number" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.longitude || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
+            <input [(ngModel)]="editingMysqlDriver.longitude" type="number" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border flex gap-1">
+            <button *ngIf="editingMysqlDriverId !== driver.id" (click)="editMysqlDriver(driver)" class="bg-blue-500 text-white px-2 rounded">Edit</button>
+            <button *ngIf="editingMysqlDriverId === driver.id" (click)="saveMysqlDriver(driver.id)" class="bg-green-500 text-white px-2 rounded">Save</button>
+            <button *ngIf="editingMysqlDriverId === driver.id" (click)="cancelEditMysqlDriver()" class="bg-gray-500 text-white px-2 rounded">Cancel</button>
+            <button (click)="deleteMysqlDriver(driver.id)" class="bg-red-500 text-white px-2 rounded">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="text-2xl mb-4 mt-8">Firebase Drivers</h2>
+    <table class="w-full border rounded overflow-hidden">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 border">Key</th>
+          <th class="p-2 border">Username</th>
+          <th class="p-2 border">Email</th>
+          <th class="p-2 border">Vehicle</th>
+          <th class="p-2 border">Lat</th>
+          <th class="p-2 border">Long</th>
+          <th class="p-2 border">Phone</th>
+          <th class="p-2 border">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let driver of firebaseDrivers | keyvalue">
+          <td class="p-2 border">{{ driver.key }}</td>
+          <td class="p-2 border" *ngIf="editingFirebaseDriverId !== driver.key">{{ driver.value.username || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingFirebaseDriverId === driver.key">
+            <input [(ngModel)]="editingFirebaseDriver.username" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingFirebaseDriverId !== driver.key">{{ driver.value.email || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingFirebaseDriverId === driver.key">
+            <input [(ngModel)]="editingFirebaseDriver.email" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border">{{ driver.value.vehicle || 'N/A' }}</td>
+          <td class="p-2 border">{{ driver.value.latitude || 'N/A' }}</td>
+          <td class="p-2 border">{{ driver.value.longitude || 'N/A' }}</td>
+          <td class="p-2 border">{{ driver.value.phone || 'N/A' }}</td>
+          <td class="p-2 border flex gap-1">
+            <button *ngIf="editingFirebaseDriverId !== driver.key" (click)="editFirebaseDriver(driver.key, driver.value)" class="bg-blue-500 text-white px-2 rounded">Edit</button>
+            <button *ngIf="editingFirebaseDriverId === driver.key" (click)="saveFirebaseDriver(driver.key)" class="bg-green-500 text-white px-2 rounded">Save</button>
+            <button *ngIf="editingFirebaseDriverId === driver.key" (click)="cancelEditFirebaseDriver()" class="bg-gray-500 text-white px-2 rounded">Cancel</button>
+            <button (click)="deleteFirebaseDriver(driver.key)" class="bg-red-500 text-white px-2 rounded">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- USERS SECTION -->
+  <div *ngIf="currentTab === 'users'" class="bg-white p-4 rounded shadow">
+    <h2 class="text-2xl mb-4">MySQL Users</h2>
+
+    <div class="mb-4 flex flex-wrap gap-2">
+      <input [(ngModel)]="newUser.username" placeholder="Username" class="p-2 border rounded" />
+      <input [(ngModel)]="newUser.email" placeholder="Email" class="p-2 border rounded" />
+      <input [(ngModel)]="newUser.password" placeholder="Password" type="password" class="p-2 border rounded" />
+      <input [(ngModel)]="newUser.cin" placeholder="CIN" class="p-2 border rounded" />
+      <input [(ngModel)]="newUser.phone" type="number" placeholder="Phone" class="p-2 border rounded" />
+      <input [(ngModel)]="newUser.latitude" type="number" placeholder="Latitude" class="p-2 border rounded" />
+      <input [(ngModel)]="newUser.longitude" type="number" placeholder="Longitude" class="p-2 border rounded" />
+      <button (click)="addMysqlUser()" class="bg-green-500 text-white p-2 rounded">Add User</button>
+    </div>
+
+    <table class="w-full border rounded overflow-hidden mb-6">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 border">ID</th>
+          <th class="p-2 border">Username</th>
+          <th class="p-2 border">Email</th>
+          <th class="p-2 border">Password</th>
+          <th class="p-2 border">Role</th>
+          <th class="p-2 border">CIN</th>
+          <th class="p-2 border">Phone</th>
+          <th class="p-2 border">Latitude</th>
+          <th class="p-2 border">Longitude</th>
+          <th class="p-2 border">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of mysqlUsers">
+          <td class="p-2 border">{{ user.id }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.username || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
+            <input [(ngModel)]="editingMysqlUser.username" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.email || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
+            <input [(ngModel)]="editingMysqlUser.email" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.password || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
+            <input [(ngModel)]="editingMysqlUser.password" type="password" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.role || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
+            <input [(ngModel)]="editingMysqlUser.role" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.cin || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
+            <input [(ngModel)]="editingMysqlUser.cin" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.phone || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
+            <input [(ngModel)]="editingMysqlUser.phone" type="number" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.latitude || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
+            <input [(ngModel)]="editingMysqlUser.latitude" type="number" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.longitude || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
+            <input [(ngModel)]="editingMysqlUser.longitude" type="number" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border flex gap-1">
+            <button *ngIf="editingMysqlUserId !== user.id" (click)="editMysqlUser(user)" class="bg-blue-500 text-white px-2 rounded">Edit</button>
+            <button *ngIf="editingMysqlUserId === user.id" (click)="saveMysqlUser(user.id)" class="bg-green-500 text-white px-2 rounded">Save</button>
+            <button *ngIf="editingMysqlUserId === user.id" (click)="cancelEditMysqlUser()" class="bg-gray-500 text-white px-2 rounded">Cancel</button>
+            <button (click)="deleteMysqlUser(user.id)" class="bg-red-500 text-white px-2 rounded">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="text-2xl mb-4 mt-8">Firebase Users</h2>
+    <table class="w-full border rounded overflow-hidden">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 border">Key</th>
+          <th class="p-2 border">Username</th>
+          <th class="p-2 border">Email</th>
+          <th class="p-2 border">Lat</th>
+          <th class="p-2 border">Long</th>
+          <th class="p-2 border">Phone</th>
+          <th class="p-2 border">FCM Token</th>
+          <th class="p-2 border">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of firebaseUsers | keyvalue">
+          <td class="p-2 border">{{ user.key }}</td>
+          <td class="p-2 border" *ngIf="editingFirebaseUserId !== user.key">{{ user.value.data?.username || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingFirebaseUserId === user.key">
+            <input [(ngModel)]="editingFirebaseUser.username" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border" *ngIf="editingFirebaseUserId !== user.key">{{ user.value.data?.email || 'N/A' }}</td>
+          <td class="p-2 border" *ngIf="editingFirebaseUserId === user.key">
+            <input [(ngModel)]="editingFirebaseUser.email" class="p-1 border rounded" />
+          </td>
+          <td class="p-2 border">{{ user.value.data?.latitude || 'N/A' }}</td>
+          <td class="p-2 border">{{ user.value.data?.longitude || 'N/A' }}</td>
+          <td class="p-2 border">{{ user.value.data?.phone || 'N/A' }}</td>
+          <td class="p-2 border">{{ user.value.data?.fcmToken || 'N/A' }}</td>
+          <td class="p-2 border flex gap-1">
+            <button *ngIf="editingFirebaseUserId !== user.key" (click)="editFirebaseUser(user.key, user.value.data)" class="bg-blue-500 text-white px-2 rounded">Edit</button>
+            <button *ngIf="editingFirebaseUserId === user.key" (click)="saveFirebaseUser(user.key)" class="bg-green-500 text-white px-2 rounded">Save</button>
+            <button *ngIf="editingFirebaseUserId === user.key" (click)="cancelEditFirebaseUser()" class="bg-gray-500 text-white px-2 rounded">Cancel</button>
+            <button (click)="deleteFirebaseUser(user.key)" class="bg-red-500 text-white px-2 rounded">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- REQUESTS SECTION -->
+  <div *ngIf="currentTab === 'requests'" class="bg-white p-4 rounded shadow">
+    <h2 class="text-2xl mb-4">Requests</h2>
+    <table class="w-full border">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 border">ID</th>
+          <th class="p-2 border">User</th>
+          <th class="p-2 border">Driver</th>
+          <th class="p-2 border">Status</th>
+          <th class="p-2 border">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of requests | keyvalue">
+          <td class="p-2 border">{{ request.key }}</td>
+          <td class="p-2 border">{{ request.value.userId }}</td>
+          <td class="p-2 border">{{ request.value.driverId }}</td>
+          <td class="p-2 border">{{ request.value.status }}</td>
+          <td class="p-2 border">
+            <button (click)="deleteRequest(request.key)" class="bg-red-500 text-white px-2 rounded">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PROFITS SECTION -->
+  <div *ngIf="currentTab === 'profit'" class="bg-white p-4 rounded shadow">
+    <h2 class="text-2xl mb-4">Profits</h2>
+    <p class="text-xl font-semibold">Total Profit: {{ totalProfit | currency }}</p>
+    <table class="w-full border mt-4">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 border">Date</th>
+          <th class="p-2 border">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let profit of profits | keyvalue">
+          <td class="p-2 border">{{ profit.value.date || 'N/A' }}</td>
+          <td class="p-2 border">{{ profit.value.amount | currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
