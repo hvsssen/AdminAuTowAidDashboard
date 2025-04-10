@@ -1,292 +1,547 @@
-<link rel="stylesheet" href="dashboard-admin.component.css">
-<div class="container mx-auto p-4">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">Autowaid Admin Dashboard</h1>
-    <button (click)="logout()" class="bg-red-500 text-white px-4 py-2 rounded">Logout</button>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<div class="container-fluid p-4 bg-light min-vh-100">
+  <div class="row mb-4 align-items-center">
+    <div class="col">
+      <h1 class="display-6 fw-bold text-primary">
+        <i class="fas fa-tachometer-alt me-2"></i>Autowaid Admin Dashboard
+      </h1>
+    </div>
+    <div class="col-auto">
+      <button (click)="logout()" class="btn btn-danger">
+        <i class="fas fa-sign-out-alt me-2"></i>Logout
+      </button>
+    </div>
   </div>
 
   <!-- Navigation Tabs -->
-  <div class="flex space-x-4 mb-6">
-    <button class="px-4 py-2 rounded" [class.bg-blue-500]="currentTab === 'drivers'" [class.text-white]="currentTab === 'drivers'" (click)="currentTab = 'drivers'">Drivers</button>
-    <button class="px-4 py-2 rounded" [class.bg-blue-500]="currentTab === 'users'" [class.text-white]="currentTab === 'users'" (click)="currentTab = 'users'">Users</button>
-    <button class="px-4 py-2 rounded" [class.bg-blue-500]="currentTab === 'requests'" [class.text-white]="currentTab === 'requests'" (click)="currentTab = 'requests'">Requests</button>
-    <button class="px-4 py-2 rounded" [class.bg-blue-500]="currentTab === 'profit'" [class.text-white]="currentTab === 'profit'" (click)="currentTab = 'profit'">Profit</button>
-  </div>
+  <ul class="nav nav-pills mb-4" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [class.active]="currentTab === 'drivers'" (click)="currentTab = 'drivers'">
+        <i class="fas fa-truck me-2"></i>Drivers
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [class.active]="currentTab === 'users'" (click)="currentTab = 'users'">
+        <i class="fas fa-users me-2"></i>Users
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [class.active]="currentTab === 'requests'" (click)="currentTab = 'requests'">
+        <i class="fas fa-list me-2"></i>Requests
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [class.active]="currentTab === 'profit'" (click)="currentTab = 'profit'">
+        <i class="fas fa-dollar-sign me-2"></i>Profit
+      </button>
+    </li>
+  </ul>
 
   <!-- DRIVERS SECTION -->
-  <div *ngIf="currentTab === 'drivers'" class="bg-white p-4 rounded shadow">
-    <h2 class="text-2xl mb-4">MySQL Drivers</h2>
-
-    <div class="mb-4 flex flex-wrap gap-2">
-      <input [(ngModel)]="newDriver.username" placeholder="Username" class="p-2 border rounded" />
-      <input [(ngModel)]="newDriver.email" placeholder="Email" class="p-2 border rounded" />
-      <input [(ngModel)]="newDriver.password" placeholder="Password" type="password" class="p-2 border rounded" />
-      <input [(ngModel)]="newDriver.cin" placeholder="CIN" class="p-2 border rounded" />
-      <input [(ngModel)]="newDriver.phone" type="number" placeholder="Phone" class="p-2 border rounded" />
-      <input [(ngModel)]="newDriver.latitude" type="number" placeholder="Latitude" class="p-2 border rounded" />
-      <input [(ngModel)]="newDriver.longitude" type="number" placeholder="Longitude" class="p-2 border rounded" />
-      <button (click)="addMysqlDriver()" class="bg-green-500 text-white p-2 rounded">Add Driver</button>
+  <div *ngIf="currentTab === 'drivers'" class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="card-title h4 mb-0">MySQL Drivers</h2>
     </div>
+    <div class="card-body">
+      <form class="row g-3 mb-4" #driverForm="ngForm" (ngSubmit)="addMysqlDriver()">
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input [(ngModel)]="newDriver.username" name="username" placeholder="Username" class="form-control" required />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input [(ngModel)]="newDriver.email" name="email" placeholder="Email" class="form-control" type="email" required />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input [(ngModel)]="newDriver.password" name="password" placeholder="Password" type="password" class="form-control" required />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+            <input [(ngModel)]="newDriver.cin" name="cin" placeholder="CIN" class="form-control" required />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+            <input [(ngModel)]="newDriver.phone" name="phone" type="number" placeholder="Phone" class="form-control" required />
+          </div>
+        </div>
+        <div class="col-md-1">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+            <input [(ngModel)]="newDriver.latitude" name="latitude" type="number" placeholder="Lat" class="form-control" step="0.0001" />
+          </div>
+        </div>
+        <div class="col-md-1">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+            <input [(ngModel)]="newDriver.longitude" name="longitude" type="number" placeholder="Long" class="form-control" step="0.0001" />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" [disabled]="driverForm.invalid" class="btn btn-success w-100">
+            <i class="fas fa-plus me-2"></i>Add Driver
+          </button>
+        </div>
+      </form>
 
-    <table class="w-full border rounded overflow-hidden mb-6">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border">ID</th>
-          <th class="p-2 border">Username</th>
-          <th class="p-2 border">Email</th>
-          <th class="p-2 border">Password</th>
-          <th class="p-2 border">Role</th>
-          <th class="p-2 border">CIN</th>
-          <th class="p-2 border">Phone</th>
-          <th class="p-2 border">Latitude</th>
-          <th class="p-2 border">Longitude</th>
-          <th class="p-2 border">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let driver of mysqlDrivers">
-          <td class="p-2 border">{{ driver.id }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.username || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
-            <input [(ngModel)]="editingMysqlDriver.username" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.email || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
-            <input [(ngModel)]="editingMysqlDriver.email" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.password || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
-            <input [(ngModel)]="editingMysqlDriver.password" type="password" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.role || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
-            <input [(ngModel)]="editingMysqlDriver.role" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.cin || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
-            <input [(ngModel)]="editingMysqlDriver.cin" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.phone || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
-            <input [(ngModel)]="editingMysqlDriver.phone" type="number" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.latitude || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
-            <input [(ngModel)]="editingMysqlDriver.latitude" type="number" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.longitude || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlDriverId === driver.id">
-            <input [(ngModel)]="editingMysqlDriver.longitude" type="number" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border flex gap-1">
-            <button *ngIf="editingMysqlDriverId !== driver.id" (click)="editMysqlDriver(driver)" class="bg-blue-500 text-white px-2 rounded">Edit</button>
-            <button *ngIf="editingMysqlDriverId === driver.id" (click)="saveMysqlDriver(driver.id)" class="bg-green-500 text-white px-2 rounded">Save</button>
-            <button *ngIf="editingMysqlDriverId === driver.id" (click)="cancelEditMysqlDriver()" class="bg-gray-500 text-white px-2 rounded">Cancel</button>
-            <button (click)="deleteMysqlDriver(driver.id)" class="bg-red-500 text-white px-2 rounded">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="table-responsive mb-6">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th class="p-2">ID</th>
+              <th class="p-2">Username</th>
+              <th class="p-2">Email</th>
+              <th class="p-2">Password</th>
+              <th class="p-2">Role</th>
+              <th class="p-2">CIN</th>
+              <th class="p-2">Phone</th>
+              <th class="p-2">Latitude</th>
+              <th class="p-2">Longitude</th>
+              <th class="p-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let driver of mysqlDrivers" [class.table-active]="editingMysqlDriverId === driver.id">
+              <td class="p-2">{{ driver.id }}</td>
+              <td class="p-2" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.username || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlDriverId === driver.id">
+                <input [(ngModel)]="editingMysqlDriver.username" name="editUsername{{driver.id}}" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.email || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlDriverId === driver.id">
+                <input [(ngModel)]="editingMysqlDriver.email" name="editEmail{{driver.id}}" class="form-control form-control-sm" type="email" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.password || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlDriverId === driver.id">
+                <input [(ngModel)]="editingMysqlDriver.password" name="editPassword{{driver.id}}" type="password" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.role || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlDriverId === driver.id">
+                <input [(ngModel)]="editingMysqlDriver.role" name="editRole{{driver.id}}" class="form-control form-control-sm" />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.cin || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlDriverId === driver.id">
+                <input [(ngModel)]="editingMysqlDriver.cin" name="editCin{{driver.id}}" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.phone || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlDriverId === driver.id">
+                <input [(ngModel)]="editingMysqlDriver.phone" name="editPhone{{driver.id}}" type="number" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.latitude || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlDriverId === driver.id">
+                <input [(ngModel)]="editingMysqlDriver.latitude" name="editLatitude{{driver.id}}" type="number" class="form-control form-control-sm" step="0.0001" />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlDriverId !== driver.id">{{ driver.longitude || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlDriverId === driver.id">
+                <input [(ngModel)]="editingMysqlDriver.longitude" name="editLongitude{{driver.id}}" type="number" class="form-control form-control-sm" step="0.0001" />
+              </td>
+              <td class="p-2">
+                <div class="btn-group" role="group">
+                  <button *ngIf="editingMysqlDriverId !== driver.id" (click)="editMysqlDriver(driver)" class="btn btn-primary btn-sm" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button *ngIf="editingMysqlDriverId === driver.id" (click)="saveMysqlDriver(driver.id)" class="btn btn-success btn-sm" title="Save">
+                    <i class="fas fa-save"></i>
+                  </button>
+                  <button *ngIf="editingMysqlDriverId === driver.id" (click)="cancelEditMysqlDriver()" class="btn btn-secondary btn-sm" title="Cancel">
+                    <i class="fas fa-times"></i>
+                  </button>
+                  <button (click)="deleteMysqlDriver(driver.id)" class="btn btn-danger btn-sm" title="Delete">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <h2 class="text-2xl mb-4 mt-8">Firebase Drivers</h2>
-    <table class="w-full border rounded overflow-hidden">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border">Key</th>
-          <th class="p-2 border">Username</th>
-          <th class="p-2 border">Email</th>
-          <th class="p-2 border">Vehicle</th>
-          <th class="p-2 border">Lat</th>
-          <th class="p-2 border">Long</th>
-          <th class="p-2 border">Phone</th>
-          <th class="p-2 border">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let driver of firebaseDrivers | keyvalue">
-          <td class="p-2 border">{{ driver.key }}</td>
-          <td class="p-2 border" *ngIf="editingFirebaseDriverId !== driver.key">{{ driver.value.username || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingFirebaseDriverId === driver.key">
-            <input [(ngModel)]="editingFirebaseDriver.username" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingFirebaseDriverId !== driver.key">{{ driver.value.email || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingFirebaseDriverId === driver.key">
-            <input [(ngModel)]="editingFirebaseDriver.email" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border">{{ driver.value.vehicle || 'N/A' }}</td>
-          <td class="p-2 border">{{ driver.value.latitude || 'N/A' }}</td>
-          <td class="p-2 border">{{ driver.value.longitude || 'N/A' }}</td>
-          <td class="p-2 border">{{ driver.value.phone || 'N/A' }}</td>
-          <td class="p-2 border flex gap-1">
-            <button *ngIf="editingFirebaseDriverId !== driver.key" (click)="editFirebaseDriver(driver.key, driver.value)" class="bg-blue-500 text-white px-2 rounded">Edit</button>
-            <button *ngIf="editingFirebaseDriverId === driver.key" (click)="saveFirebaseDriver(driver.key)" class="bg-green-500 text-white px-2 rounded">Save</button>
-            <button *ngIf="editingFirebaseDriverId === driver.key" (click)="cancelEditFirebaseDriver()" class="bg-gray-500 text-white px-2 rounded">Cancel</button>
-            <button (click)="deleteFirebaseDriver(driver.key)" class="bg-red-500 text-white px-2 rounded">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="card-header bg-primary text-white mt-5">
+        <h2 class="card-title h4 mb-0">Firebase Drivers</h2>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th class="p-2">Key</th>
+              <th class="p-2">Username</th>
+              <th class="p-2">Email</th>
+              <th class="p-2">Vehicle</th>
+              <th class="p-2">Lat</th>
+              <th class="p-2">Long</th>
+              <th class="p-2">Phone</th>
+              <th class="p-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let driver of firebaseDrivers | keyvalue" [class.table-active]="editingFirebaseDriverId === driver.key">
+              <td class="p-2">{{ driver.key }}</td>
+              <td class="p-2" *ngIf="editingFirebaseDriverId !== driver.key">{{ driver.value.username || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingFirebaseDriverId === driver.key">
+                <input [(ngModel)]="editingFirebaseDriver.username" name="editFbUsername{{driver.key}}" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingFirebaseDriverId !== driver.key">{{ driver.value.email || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingFirebaseDriverId === driver.key">
+                <input [(ngModel)]="editingFirebaseDriver.email" name="editFbEmail{{driver.key}}" class="form-control form-control-sm" type="email" required />
+              </td>
+              <td class="p-2">{{ driver.value.vehicle || 'N/A' }}</td>
+              <td class="p-2">{{ driver.value.latitude || 'N/A' }}</td>
+              <td class="p-2">{{ driver.value.longitude || 'N/A' }}</td>
+              <td class="p-2">{{ driver.value.phone || 'N/A' }}</td>
+              <td class="p-2">
+                <div class="btn-group" role="group">
+                  <button *ngIf="editingFirebaseDriverId !== driver.key" (click)="editFirebaseDriver(driver.key, driver.value)" class="btn btn-primary btn-sm" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button *ngIf="editingFirebaseDriverId === driver.key" (click)="saveFirebaseDriver(driver.key)" class="btn btn-success btn-sm" title="Save">
+                    <i class="fas fa-save"></i>
+                  </button>
+                  <button *ngIf="editingFirebaseDriverId === driver.key" (click)="cancelEditFirebaseDriver()" class="btn btn-secondary btn-sm" title="Cancel">
+                    <i class="fas fa-times"></i>
+                  </button>
+                  <button (click)="deleteFirebaseDriver(driver.key)" class="btn btn-danger btn-sm" title="Delete">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <!-- USERS SECTION -->
-  <div *ngIf="currentTab === 'users'" class="bg-white p-4 rounded shadow">
-    <h2 class="text-2xl mb-4">MySQL Users</h2>
-
-    <div class="mb-4 flex flex-wrap gap-2">
-      <input [(ngModel)]="newUser.username" placeholder="Username" class="p-2 border rounded" />
-      <input [(ngModel)]="newUser.email" placeholder="Email" class="p-2 border rounded" />
-      <input [(ngModel)]="newUser.password" placeholder="Password" type="password" class="p-2 border rounded" />
-      <input [(ngModel)]="newUser.cin" placeholder="CIN" class="p-2 border rounded" />
-      <input [(ngModel)]="newUser.phone" type="number" placeholder="Phone" class="p-2 border rounded" />
-      <input [(ngModel)]="newUser.latitude" type="number" placeholder="Latitude" class="p-2 border rounded" />
-      <input [(ngModel)]="newUser.longitude" type="number" placeholder="Longitude" class="p-2 border rounded" />
-      <button (click)="addMysqlUser()" class="bg-green-500 text-white p-2 rounded">Add User</button>
+  <div *ngIf="currentTab === 'users'" class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="card-title h4 mb-0">MySQL Users</h2>
     </div>
+    <div class="card-body">
+      <form class="row g-3 mb-4" #userForm="ngForm" (ngSubmit)="addMysqlUser()">
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input [(ngModel)]="newUser.username" name="userUsername" placeholder="Username" class="form-control" required />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input [(ngModel)]="newUser.email" name="userEmail" placeholder="Email" class="form-control" type="email" required />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input [(ngModel)]="newUser.password" name="userPassword" placeholder="Password" type="password" class="form-control" required />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+            <input [(ngModel)]="newUser.cin" name="userCin" placeholder="CIN" class="form-control" required />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+            <input [(ngModel)]="newUser.phone" name="userPhone" type="number" placeholder="Phone" class="form-control" required />
+          </div>
+        </div>
+        <div class="col-md-1">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+            <input [(ngModel)]="newUser.latitude" name="userLatitude" type="number" placeholder="Lat" class="form-control" step="0.0001" />
+          </div>
+        </div>
+        <div class="col-md-1">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+            <input [(ngModel)]="newUser.longitude" name="userLongitude" type="number" placeholder="Long" class="form-control" step="0.0001" />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" [disabled]="userForm.invalid" class="btn btn-success w-100">
+            <i class="fas fa-plus me-2"></i>Add User
+          </button>
+        </div>
+      </form>
 
-    <table class="w-full border rounded overflow-hidden mb-6">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border">ID</th>
-          <th class="p-2 border">Username</th>
-          <th class="p-2 border">Email</th>
-          <th class="p-2 border">Password</th>
-          <th class="p-2 border">Role</th>
-          <th class="p-2 border">CIN</th>
-          <th class="p-2 border">Phone</th>
-          <th class="p-2 border">Latitude</th>
-          <th class="p-2 border">Longitude</th>
-          <th class="p-2 border">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of mysqlUsers">
-          <td class="p-2 border">{{ user.id }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.username || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
-            <input [(ngModel)]="editingMysqlUser.username" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.email || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
-            <input [(ngModel)]="editingMysqlUser.email" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.password || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
-            <input [(ngModel)]="editingMysqlUser.password" type="password" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.role || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
-            <input [(ngModel)]="editingMysqlUser.role" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.cin || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
-            <input [(ngModel)]="editingMysqlUser.cin" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.phone || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
-            <input [(ngModel)]="editingMysqlUser.phone" type="number" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.latitude || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
-            <input [(ngModel)]="editingMysqlUser.latitude" type="number" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId !== user.id">{{ user.longitude || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingMysqlUserId === user.id">
-            <input [(ngModel)]="editingMysqlUser.longitude" type="number" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border flex gap-1">
-            <button *ngIf="editingMysqlUserId !== user.id" (click)="editMysqlUser(user)" class="bg-blue-500 text-white px-2 rounded">Edit</button>
-            <button *ngIf="editingMysqlUserId === user.id" (click)="saveMysqlUser(user.id)" class="bg-green-500 text-white px-2 rounded">Save</button>
-            <button *ngIf="editingMysqlUserId === user.id" (click)="cancelEditMysqlUser()" class="bg-gray-500 text-white px-2 rounded">Cancel</button>
-            <button (click)="deleteMysqlUser(user.id)" class="bg-red-500 text-white px-2 rounded">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="table-responsive mb-6">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th class="p-2">ID</th>
+              <th class="p-2">Username</th>
+              <th class="p-2">Email</th>
+              <th class="p-2">Password</th>
+              <th class="p-2">Role</th>
+              <th class="p-2">CIN</th>
+              <th class="p-2">Phone</th>
+              <th class="p-2">Latitude</th>
+              <th class="p-2">Longitude</th>
+              <th class="p-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of mysqlUsers" [class.table-active]="editingMysqlUserId === user.id">
+              <td class="p-2">{{ user.id }}</td>
+              <td class="p-2" *ngIf="editingMysqlUserId !== user.id">{{ user.username || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlUserId === user.id">
+                <input [(ngModel)]="editingMysqlUser.username" name="editUserUsername{{user.id}}" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlUserId !== user.id">{{ user.email || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlUserId === user.id">
+                <input [(ngModel)]="editingMysqlUser.email" name="editUserEmail{{user.id}}" class="form-control form-control-sm" type="email" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlUserId !== user.id">{{ user.password || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlUserId === user.id">
+                <input [(ngModel)]="editingMysqlUser.password" name="editUserPassword{{user.id}}" type="password" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlUserId !== user.id">{{ user.role || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlUserId === user.id">
+                <input [(ngModel)]="editingMysqlUser.role" name="editUserRole{{user.id}}" class="form-control form-control-sm" />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlUserId !== user.id">{{ user.cin || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlUserId === user.id">
+                <input [(ngModel)]="editingMysqlUser.cin" name="editUserCin{{user.id}}" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlUserId !== user.id">{{ user.phone || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlUserId === user.id">
+                <input [(ngModel)]="editingMysqlUser.phone" name="editUserPhone{{user.id}}" type="number" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlUserId !== user.id">{{ user.latitude || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlUserId === user.id">
+                <input [(ngModel)]="editingMysqlUser.latitude" name="editUserLatitude{{user.id}}" type="number" class="form-control form-control-sm" step="0.0001" />
+              </td>
+              <td class="p-2" *ngIf="editingMysqlUserId !== user.id">{{ user.longitude || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingMysqlUserId === user.id">
+                <input [(ngModel)]="editingMysqlUser.longitude" name="editUserLongitude{{user.id}}" type="number" class="form-control form-control-sm" step="0.0001" />
+              </td>
+              <td class="p-2">
+                <div class="btn-group" role="group">
+                  <button *ngIf="editingMysqlUserId !== user.id" (click)="editMysqlUser(user)" class="btn btn-primary btn-sm" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button *ngIf="editingMysqlUserId === user.id" (click)="saveMysqlUser(user.id)" class="btn btn-success btn-sm" title="Save">
+                    <i class="fas fa-save"></i>
+                  </button>
+                  <button *ngIf="editingMysqlUserId === user.id" (click)="cancelEditMysqlUser()" class="btn btn-secondary btn-sm" title="Cancel">
+                    <i class="fas fa-times"></i>
+                  </button>
+                  <button (click)="deleteMysqlUser(user.id)" class="btn btn-danger btn-sm" title="Delete">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <h2 class="text-2xl mb-4 mt-8">Firebase Users</h2>
-    <table class="w-full border rounded overflow-hidden">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border">Key</th>
-          <th class="p-2 border">Username</th>
-          <th class="p-2 border">Email</th>
-          <th class="p-2 border">Lat</th>
-          <th class="p-2 border">Long</th>
-          <th class="p-2 border">Phone</th>
-          <th class="p-2 border">FCM Token</th>
-          <th class="p-2 border">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of firebaseUsers | keyvalue">
-          <td class="p-2 border">{{ user.key }}</td>
-          <td class="p-2 border" *ngIf="editingFirebaseUserId !== user.key">{{ user.value.data?.username || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingFirebaseUserId === user.key">
-            <input [(ngModel)]="editingFirebaseUser.username" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border" *ngIf="editingFirebaseUserId !== user.key">{{ user.value.data?.email || 'N/A' }}</td>
-          <td class="p-2 border" *ngIf="editingFirebaseUserId === user.key">
-            <input [(ngModel)]="editingFirebaseUser.email" class="p-1 border rounded" />
-          </td>
-          <td class="p-2 border">{{ user.value.data?.latitude || 'N/A' }}</td>
-          <td class="p-2 border">{{ user.value.data?.longitude || 'N/A' }}</td>
-          <td class="p-2 border">{{ user.value.data?.phone || 'N/A' }}</td>
-          <td class="p-2 border">{{ user.value.data?.fcmToken || 'N/A' }}</td>
-          <td class="p-2 border flex gap-1">
-            <button *ngIf="editingFirebaseUserId !== user.key" (click)="editFirebaseUser(user.key, user.value.data)" class="bg-blue-500 text-white px-2 rounded">Edit</button>
-            <button *ngIf="editingFirebaseUserId === user.key" (click)="saveFirebaseUser(user.key)" class="bg-green-500 text-white px-2 rounded">Save</button>
-            <button *ngIf="editingFirebaseUserId === user.key" (click)="cancelEditFirebaseUser()" class="bg-gray-500 text-white px-2 rounded">Cancel</button>
-            <button (click)="deleteFirebaseUser(user.key)" class="bg-red-500 text-white px-2 rounded">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="card-header bg-primary text-white mt-5">
+        <h2 class="card-title h4 mb-0">Firebase Users</h2>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th class="p-2">Key</th>
+              <th class="p-2">Username</th>
+              <th class="p-2">Email</th>
+              <th class="p-2">Lat</th>
+              <th class="p-2">Long</th>
+              <th class="p-2">Phone</th>
+              <th class="p-2">FCM Token</th>
+              <th class="p-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of firebaseUsers | keyvalue" [class.table-active]="editingFirebaseUserId === user.key">
+              <td class="p-2">{{ user.key }}</td>
+              <td class="p-2" *ngIf="editingFirebaseUserId !== user.key">{{ user.value.data?.username || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingFirebaseUserId === user.key">
+                <input [(ngModel)]="editingFirebaseUser.username" name="editFbUserUsername{{user.key}}" class="form-control form-control-sm" required />
+              </td>
+              <td class="p-2" *ngIf="editingFirebaseUserId !== user.key">{{ user.value.data?.email || 'N/A' }}</td>
+              <td class="p-2" *ngIf="editingFirebaseUserId === user.key">
+                <input [(ngModel)]="editingFirebaseUser.email" name="editFbUserEmail{{user.key}}" class="form-control form-control-sm" type="email" required />
+              </td>
+              <td class="p-2">{{ user.value.data?.latitude || 'N/A' }}</td>
+              <td class="p-2">{{ user.value.data?.longitude || 'N/A' }}</td>
+              <td class="p-2">{{ user.value.data?.phone || 'N/A' }}</td>
+              <td class="p-2">{{ user.value.data?.fcmToken || 'N/A' }}</td>
+              <td class="p-2">
+                <div class="btn-group" role="group">
+                  <button *ngIf="editingFirebaseUserId !== user.key" (click)="editFirebaseUser(user.key, user.value.data)" class="btn btn-primary btn-sm" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button *ngIf="editingFirebaseUserId === user.key" (click)="saveFirebaseUser(user.key)" class="btn btn-success btn-sm" title="Save">
+                    <i class="fas fa-save"></i>
+                  </button>
+                  <button *ngIf="editingFirebaseUserId === user.key" (click)="cancelEditFirebaseUser()" class="btn btn-secondary btn-sm" title="Cancel">
+                    <i class="fas fa-times"></i>
+                  </button>
+                  <button (click)="deleteFirebaseUser(user.key)" class="btn btn-danger btn-sm" title="Delete">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <!-- REQUESTS SECTION -->
-  <div *ngIf="currentTab === 'requests'" class="bg-white p-4 rounded shadow">
-    <h2 class="text-2xl mb-4">Requests</h2>
-    <table class="w-full border">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border">ID</th>
-          <th class="p-2 border">User</th>
-          <th class="p-2 border">Driver</th>
-          <th class="p-2 border">Status</th>
-          <th class="p-2 border">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let request of requests | keyvalue">
-          <td class="p-2 border">{{ request.key }}</td>
-          <td class="p-2 border">{{ request.value.userId }}</td>
-          <td class="p-2 border">{{ request.value.driverId }}</td>
-          <td class="p-2 border">{{ request.value.status }}</td>
-          <td class="p-2 border">
-            <button (click)="deleteRequest(request.key)" class="bg-red-500 text-white px-2 rounded">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div *ngIf="currentTab === 'requests'" class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="card-title h4 mb-0">Requests</h2>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th class="p-2">ID</th>
+              <th class="p-2">User</th>
+              <th class="p-2">Driver</th>
+              <th class="p-2">Status</th>
+              <th class="p-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let request of requests | keyvalue">
+              <td class="p-2">{{ request.key }}</td>
+              <td class="p-2">{{ request.value.userId }}</td>
+              <td class="p-2">{{ request.value.driverId }}</td>
+              <td class="p-2">
+                <span class="badge" [ngClass]="{
+                  'bg-success': request.value.status === 'completed',
+                  'bg-warning': request.value.status === 'pending',
+                  'bg-danger': request.value.status === 'cancelled',
+                  'bg-info': request.value.status === 'in-progress'
+                }">{{ request.value.status }}</span>
+              </td>
+              <td class="p-2">
+                <button (click)="deleteRequest(request.key)" class="btn btn-danger btn-sm" title="Delete">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <!-- PROFITS SECTION -->
-  <div *ngIf="currentTab === 'profit'" class="bg-white p-4 rounded shadow">
-    <h2 class="text-2xl mb-4">Profits</h2>
-    <p class="text-xl font-semibold">Total Profit: {{ totalProfit | currency }}</p>
-    <table class="w-full border mt-4">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border">Date</th>
-          <th class="p-2 border">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let profit of profits | keyvalue">
-          <td class="p-2 border">{{ profit.value.date || 'N/A' }}</td>
-          <td class="p-2 border">{{ profit.value.amount | currency }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div *ngIf="currentTab === 'profit'" class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="card-title h4 mb-0">Profits</h2>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-success d-flex align-items-center">
+        <i class="fas fa-dollar-sign me-2 fa-2x"></i>
+        <div>
+          <h3 class="mb-0">Total Profit: {{ totalProfit | currency }}</h3>
+        </div>
+      </div>
+      <div class="table-responsive mt-4">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th class="p-2">Date</th>
+              <th class="p-2">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let profit of profits | keyvalue">
+              <td class="p-2">{{ profit.value.date || 'N/A' | date:'medium' }}</td>
+              <td class="p-2">{{ profit.value.amount | currency }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+  :root {
+    --primary-color: #0d6efd;
+    --hover-color: #0056b3;
+  }
+
+  .nav-pills .nav-link {
+    border-radius: 0.375rem;
+    margin-right: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .nav-pills .nav-link.active {
+    background-color: white; /* White background when active */
+    color: black; /* Black text when active */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #0d6efd; /* Optional: Add a blue border to indicate active state */
+  }
+
+  .nav-pills .nav-link:hover:not(.active) {
+    background-color: #e9ecef;
+  }
+
+  .card {
+    border: none;
+    border-radius: 0.75rem;
+    transition: transform 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+  }
+
+  .table-responsive {
+    margin-bottom: 1rem;
+    border-radius: 0.375rem;
+    overflow: hidden;
+  }
+
+  .btn-group .btn {
+    margin-right: 0.25rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .mt-8 {
+    margin-top: 2rem;
+  }
+
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+
+  .table thead th {
+    background-color: #343a40 !important;
+    color: white;
+  }
+
+  .input-group-text {
+    background-color: #f8f9fa;
+  }
+</style>
