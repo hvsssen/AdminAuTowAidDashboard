@@ -7,5 +7,5 @@ import { RouterModule } from '@angular/router';
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardAdminComponent }
+  { path: 'dashboard', component: DashboardAdminComponent, canActivate: [AuthGuard] },
 ];
